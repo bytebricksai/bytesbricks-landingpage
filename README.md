@@ -7,6 +7,8 @@
 
 Welcome to **BytesBrick Landing Page**, a cutting-edge web application built with [Next.js](https://nextjs.org) that leverages the power of TypeScript, React, and modern UI frameworks to deliver an exceptional user experience.
 
+![image](https://github.com/user-attachments/assets/e993810b-f844-46d2-9302-a046e5b225cd)
+
 ## Features
 
 - **Server-Side Rendering:** Optimized for performance and SEO.
