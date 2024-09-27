@@ -47,12 +47,12 @@ export default function LandingPage() {
 
   const NavItems = () => (
     <>
-      <Button variant="ghost" onClick={() => scrollToSection('mision-vision')}>Misión y Visión</Button>
-      <Button variant="ghost" onClick={() => scrollToSection('proyectos')}>Proyectos</Button>
-      <Button variant="ghost" onClick={() => scrollToSection('caracteristicas')}>Características</Button>
-      <Button variant="ghost" onClick={() => scrollToSection('enfoque')}>Enfoque</Button>
+      <Button variant="ghost" onClick={() => scrollToSection('mision-vision')}>Mission and Vision</Button>
+      <Button variant="ghost" onClick={() => scrollToSection('proyectos')}>Projects</Button>
+      <Button variant="ghost" onClick={() => scrollToSection('caracteristicas')}>Characteristics</Button>
+      <Button variant="ghost" onClick={() => scrollToSection('enfoque')}>Focus</Button>
       <ContactModal>
-        <Button variant="ghost">Contacto</Button>
+        <Button variant="ghost">Contact</Button>
       </ContactModal>
     </>
   )
