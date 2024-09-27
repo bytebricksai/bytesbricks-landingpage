@@ -1,33 +1,29 @@
 import { NextResponse } from 'next/server'
-import nodemailer from 'nodemailer'
 
 export async function POST(req: Request) {
   const { name, email, message } = await req.json()
 
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  })
-
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: process.env.EMAIL_TO,
-    subject: `New contact from ${name}`,
-    text: `
-      Name: ${name}
-      Email: ${email}
-      Message: ${message}
-    `,
-  }
-
+  const formspreeEndpoint = 'https://formspree.io/f/mqazrpdw';
   try {
-    await transporter.sendMail(mailOptions)
-    return NextResponse.json({ message: 'Email sent successfully' }, { status: 200 })
+    const response = await fetch(formspreeEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({ name, email, message })
+    });
+
+    if (response.ok) {
+      console.log('Form submitted successfully')
+      return NextResponse.json({ message: 'Form submitted successfully' }, { status: 200 })
+    } else {
+      const errorData = await response.json()
+      console.error('Formspree error:', errorData)
+      return NextResponse.json({ error: 'Failed to submit form', details: errorData }, { status: 500 })
+    }
   } catch (error) {
-    console.error('Error sending email:', error)
-    return NextResponse.json({ error: 'Failed to send email' }, { status: 500 })
+    console.error('Error submitting form:', error)
+    return NextResponse.json({ error: 'Failed to submit form', details: 'Unknown error' }, { status: 500 })
   }
 }

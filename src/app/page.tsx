@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Suspense } from "react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Cpu, Zap, BarChart, LineChart, Shield, Mail } from "lucide-react";
@@ -13,7 +14,6 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { ContactModal } from "@/components/ContactModal";
-import Image from "next/image";
 
 // Dynamically import SplineSphere with no SSR to prevent Server Component issues
 const SplineSphere = dynamic(() => import("@/components/SplineSphere"), {
@@ -31,22 +31,25 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="p-6 border-b fixed w-full bg-background/80 backdrop-blur-sm z-10">
+      <header className="p-4 border-b fixed w-full bg-background/80 backdrop-blur-sm z-10">
         <nav className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold">BytesBrick</h1>
+          <div className="flex items-center">
+            <Image src="/logo.jpg" alt="BytesBrick Logo" width={42} height={42} className="mr-2" />
+            <h1 className="text-2xl font-bold">BytesBrick</h1>
+          </div>
           <ContactModal>
             <Button variant="ghost">Contact</Button>
           </ContactModal>
         </nav>
       </header>
 
-      <main className="relative">
+      <main className="pt-20">
         <div className="h-[calc(100vh-5rem)] relative overflow-hidden">
           <Image
             src="/background.svg"
             alt="Fondo futurista"
             fill
-            priority // Ensures the image is preloaded
+            priority
             className="absolute object-cover -z-10"
             style={{
               transform: `translateY(${scrollY * 0.5}px)`,

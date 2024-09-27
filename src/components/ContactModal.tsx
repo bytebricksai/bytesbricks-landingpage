@@ -42,8 +42,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ children }) => {
       if (response.ok) {
         toast({
           title: "Message sent",
-          description:
-            "Thank you for contacting us. We will get back to you soon.",
+          description: "Thank you for contacting us. We will get back to you soon.",
         });
         setName("");
         setEmail("");
