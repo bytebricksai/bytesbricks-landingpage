@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { ReactNode, useState } from 'react'
-import { Button } from "@/components/ui/button"
+import { ReactNode, useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,75 +9,74 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/components/ui/use-toast"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
 
 interface ContactModalProps {
   children: ReactNode;
 }
 
 export const ContactModal: React.FC<ContactModalProps> = ({ children }) => {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [message, setMessage] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const { toast } = useToast()
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
+      const response = await fetch("/api/contact", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ name, email, message }),
-      })
+      });
 
       if (response.ok) {
         toast({
-          title: "Mensaje enviado",
-          description: "Gracias por contactarnos. Te responderemos pronto.",
-        })
-        setName('')
-        setEmail('')
-        setMessage('')
+          title: "Message sent",
+          description:
+            "Thank you for contacting us. We will get back to you soon.",
+        });
+        setName("");
+        setEmail("");
+        setMessage("");
       } else {
-        throw new Error('Failed to send message')
+        throw new Error("Failed to send message");
       }
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error("Error sending message:", error);
       toast({
         title: "Error",
-        description: "No se pudo enviar el mensaje. Por favor, inténtalo de nuevo.",
+        description: "Failed to send the message. Please try again.",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        {children}
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Contáctanos</DialogTitle>
+          <DialogTitle>Contact Us</DialogTitle>
           <DialogDescription>
-            Envíanos un mensaje y te responderemos lo antes posible.
+            Send us a message, and we will respond as soon as possible.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              Nombre
+              Name
             </Label>
             <Input
               id="name"
@@ -102,7 +101,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ children }) => {
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="message" className="text-right">
-              Mensaje
+              Message
             </Label>
             <Textarea
               id="message"
@@ -113,10 +112,10 @@ export const ContactModal: React.FC<ContactModalProps> = ({ children }) => {
             />
           </div>
           <Button type="submit" className="ml-auto" disabled={isSubmitting}>
-            {isSubmitting ? 'Enviando...' : 'Enviar mensaje'}
+            {isSubmitting ? "Sending..." : "Send Message"}
           </Button>
         </form>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
