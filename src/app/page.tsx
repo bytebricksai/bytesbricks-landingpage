@@ -14,6 +14,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { ContactModal } from "@/components/ContactModal";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
 
 // Dynamically import SplineSphere with no SSR to prevent Server Component issues
 const SplineSphere = dynamic(() => import("@/components/SplineSphere"), {
@@ -21,30 +23,68 @@ const SplineSphere = dynamic(() => import("@/components/SplineSphere"), {
 });
 
 export default function LandingPage() {
-  const [scrollY, setScrollY] = useState(0);
+  const [scrollY, setScrollY] = useState(0)
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    const handleScroll = () => setScrollY(window.scrollY)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id)
+    if (element) {
+      const offset = 80 // Ajusta este valor según la altura de tu encabezado
+      const elementPosition = element.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - offset
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
+    }
+  }
+
+  const NavItems = () => (
+    <>
+      <Button variant="ghost" onClick={() => scrollToSection('mision-vision')}>Misión y Visión</Button>
+      <Button variant="ghost" onClick={() => scrollToSection('proyectos')}>Proyectos</Button>
+      <Button variant="ghost" onClick={() => scrollToSection('caracteristicas')}>Características</Button>
+      <Button variant="ghost" onClick={() => scrollToSection('enfoque')}>Enfoque</Button>
+      <ContactModal>
+        <Button variant="ghost">Contacto</Button>
+      </ContactModal>
+    </>
+  )
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="p-4 border-b fixed w-full bg-background/80 backdrop-blur-sm z-10">
+      <header className="p-6 border-b fixed w-full bg-background/80 backdrop-blur-sm z-10">
         <nav className="container mx-auto flex justify-between items-center">
           <div className="flex items-center">
             <Image src="/logo.jpg" alt="BytesBrick Logo" width={42} height={42} className="mr-2" />
             <h1 className="text-2xl font-bold">BytesBrick</h1>
           </div>
-          <ContactModal>
-            <Button variant="ghost">Contact</Button>
-          </ContactModal>
+          <div className="hidden md:flex space-x-4">
+            <NavItems />
+          </div>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon" className="md:hidden">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+              <nav className="flex flex-col space-y-4">
+                <NavItems />
+              </nav>
+            </SheetContent>
+          </Sheet>
         </nav>
       </header>
 
       <main className="pt-20">
-        <div className="h-[calc(100vh-5rem)] relative overflow-hidden">
+        <div className="min-h-[calc(100vh-5rem)] relative overflow-hidden flex items-center">
           <Image
             src="/background.svg"
             alt="Fondo futurista"
@@ -56,17 +96,19 @@ export default function LandingPage() {
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background" />
-          <div className="container mx-auto px-4 h-full flex items-center justify-between relative">
-            <div className="text-center space-y-4 z-10 max-w-xl">
-              <p className="text-5xl font-bold text-primary">
+          <div className="container mx-auto px-4 py-12 flex flex-col lg:flex-row items-center justify-between relative">
+            <div className="text-center lg:text-left space-y-6 z-10 max-w-xl mx-auto lg:mx-0">
+              <h2 className="text-4xl sm:text-5xl font-bold text-primary">
                 Building the Future with AI
-              </p>
-              <p className="text-xl text-black-200 mx-auto">
+              </h2>
+              <p className="text-lg sm:text-xl text-muted-foreground">
                 Innovative solutions that improve everyday life and boost
                 business efficiency.
               </p>
-              <div className="flex justify-center space-x-4">
-                <Button size="lg">Discover Our Solutions</Button>
+              <div className="flex flex-col sm:flex-row justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
+                <Button size="lg" onClick={() => scrollToSection('proyectos')}>
+                  Discover Our Solutions
+                </Button>
                 <ContactModal>
                   <Button size="lg" variant="outline">
                     <Mail className="mr-2 h-4 w-4" /> Contact us
@@ -74,19 +116,19 @@ export default function LandingPage() {
                 </ContactModal>
               </div>
             </div>
-            <div className="w-full h-full hidden lg:block relative">
-              <Suspense fallback={<div>Loading...</div>}>
+            <div className="w-full max-w-[670px] aspect-square mt-12 lg:mt-0 relative rounded-full overflow-hidden">
+              <Suspense fallback={<div className="w-full h-full flex items-center justify-center rounded-full bg-muted">Loading...</div>}>
                 <SplineSphere />
               </Suspense>
             </div>
           </div>
         </div>
 
-        <section className="py-16 bg-muted">
+        <section id="mision-vision" className="py-16 bg-muted">
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
-                <h3 className="text-3xl font-bold mb-4">Our Mision</h3>
+                <h3 className="text-3xl font-bold mb-4">Our Mission</h3>
                 <p className="text-lg text-muted-foreground">
                   At BytesBrick, we are dedicated to transforming everyday life
                   and business processes through innovative and accessible
@@ -108,7 +150,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="py-16">
+        <section id="proyectos" className="py-16">
           <div className="container mx-auto px-4">
             <h3 className="text-3xl font-bold mb-8 text-center">
               Our Projects
@@ -155,7 +197,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="py-16 bg-muted">
+        <section id="caracteristicas" className="py-16 bg-muted">
           <div className="container mx-auto px-4">
             <h3 className="text-3xl font-bold mb-8 text-center">
               What characterizes us
@@ -211,7 +253,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="container mx-auto px-4 py-16 space-y-16">
+        <section id="enfoque" className="container mx-auto px-4 py-16 space-y-16">
           <section className="text-center space-y-4">
             <h3 className="text-3xl font-bold">Our Approach</h3>
             <p className="text-muted-foreground max-w-2xl mx-auto">
