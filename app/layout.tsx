@@ -69,17 +69,17 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  // Add other relevant metadata like icons, manifest, etc.
-  // icons: {
-  //   icon: '/favicon.ico',
-  //   shortcut: '/shortcut-icon.png',
-  //   apple: '/apple-icon.png',
-  //   other: {
-  //     rel: 'apple-touch-icon-precomposed',
-  //     url: '/apple-touch-icon-precomposed.png',
-  //   },
-  // },
-  // manifest: '/site.webmanifest',
+  // Add icons configuration
+  icons: {
+    icon: "/logo.png", // Standard favicon
+    shortcut: "/logo.png", // Older browsers
+    apple: "/logo.png", // Apple touch icon
+    other: {
+      rel: "apple-touch-icon-precomposed",
+      url: "/logo.png", // Precomposed Apple touch icon
+    },
+  },
+  // manifest: '/site.webmanifest', // Uncomment if you have a manifest
 };
 
 export default function RootLayout({
