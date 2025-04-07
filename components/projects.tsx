@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Markdown } from "@/components/markdown";
 import { Github, ExternalLink } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, LazyMotion, domAnimation } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
@@ -101,24 +101,22 @@ const NotifyMeForm = () => {
   );
 };
 
-// Define animation variants (restored)
+// Define animation variants (optimized)
 const containerVariants = {
-  hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
+      staggerChildren: 0.05,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.5,
+      duration: 0.3,
     },
   },
 };
@@ -190,128 +188,130 @@ export default function Projects() {
   };
 
   return (
-    <div id="projects" className="w-full">
-      <div className="justify-center text-left text-wrap pt-16 md:pt-20 px-4 md:px-6 lg:px-8 rounded-lg transition-colors bg-transparent">
-        <motion.section
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="mx-auto w-full max-w-7xl"
-        >
-          <motion.h1
-            className="text-2xl md:text-4xl font-bold mb-2"
-            variants={itemVariants}
+    <LazyMotion features={domAnimation}>
+      <div id="projects" className="w-full bg-transparent">
+        <div className="justify-center text-left text-wrap pt-16 md:pt-20 px-4 md:px-6 lg:px-8 rounded-lg bg-transparent">
+          <motion.section
+            variants={containerVariants}
+            initial="visible"
+            animate="visible"
+            className="mx-auto w-full max-w-7xl"
           >
-            Our Solutions
-          </motion.h1>
-          <motion.div
-            className="h-1 w-20 bg-primary mb-6"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
-          />
+            <motion.h1
+              className="text-2xl md:text-4xl font-bold mb-2"
+              variants={itemVariants}
+            >
+              Our Solutions
+            </motion.h1>
+            <motion.div
+              className="h-1 w-20 bg-primary mb-6"
+              initial={{ scaleX: 1 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.3 }}
+            />
 
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-auto"
-            variants={itemVariants}
-          >
-            {projects.map((project, index) => (
-              <Dialog key={project.id}>
-                <DialogTrigger asChild>
-                  <motion.div
-                    className={`${getProjectCardClass(
-                      index,
-                      projects.length
-                    )} group cursor-pointer rounded-lg p-4 md:p-6 hover:border-primary transition-colors shadow-sm flex flex-col justify-between`}
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div>
-                      <div className="flex justify-between items-start mb-4">
-                        <h2 className="text-xl md:text-2xl font-semibold mb-3 group-hover:text-primary transition-colors">
-                          {project.title}
-                        </h2>
-                        {project.views !== undefined && (
-                          <span className="text-sm text-muted-foreground flex items-center gap-1">
-                            <ExternalLink className="w-4 h-4" />
-                            {project.views.toLocaleString()}
-                          </span>
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-auto"
+              variants={itemVariants}
+            >
+              {projects.map((project, index) => (
+                <Dialog key={project.id}>
+                  <DialogTrigger asChild>
+                    <motion.div
+                      className={`${getProjectCardClass(
+                        index,
+                        projects.length
+                      )} group cursor-pointer rounded-lg p-4 md:p-6 hover:border-primary transition-colors shadow-sm flex flex-col justify-between backdrop-blur-sm bg-white/10 border border-white/20`}
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div>
+                        <div className="flex justify-between items-start mb-4">
+                          <h2 className="text-xl md:text-2xl font-semibold mb-3 group-hover:text-primary transition-colors">
+                            {project.title}
+                          </h2>
+                          {project.views !== undefined && (
+                            <span className="text-sm text-muted-foreground flex items-center gap-1">
+                              <ExternalLink className="w-4 h-4" />
+                              {project.views.toLocaleString()}
+                            </span>
+                          )}
+                        </div>
+
+                        {project.description && (
+                          <p className="text-sm md:text-base text-muted-foreground mb-4 leading-relaxed line-clamp-3">
+                            {project.description}
+                          </p>
                         )}
                       </div>
 
-                      {project.description && (
-                        <p className="text-sm md:text-base text-muted-foreground mb-4 leading-relaxed line-clamp-3">
-                          {project.description}
-                        </p>
+                      <div className="flex items-center text-sm text-primary mt-auto font-medium">
+                        Explore Functionality →
+                      </div>
+                    </motion.div>
+                  </DialogTrigger>
+
+                  <DialogContent className="w-[90vw] max-w-3xl overflow-y-auto max-h-[90vh] bg-white/80 rounded-lg">
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl md:text-3xl font-bold text-gray-900">
+                        {project.title}
+                      </DialogTitle>
+                    </DialogHeader>
+
+                    <div className="mt-4 space-y-6 text-gray-800">
+                      {project.longDescription && (
+                        <>
+                          <div className="prose prose-sm md:prose-base max-w-none prose-headings:text-primary prose-strong:text-gray-900">
+                            <Markdown>{project.longDescription}</Markdown>
+                          </div>
+                          {project.longDescription.includes(
+                            "Get Notified!"
+                          ) && <NotifyMeForm />}
+                        </>
                       )}
-                    </div>
 
-                    <div className="flex items-center text-sm text-primary mt-auto font-medium">
-                      Explore Functionality →
-                    </div>
-                  </motion.div>
-                </DialogTrigger>
-
-                <DialogContent className="w-[90vw] max-w-3xl overflow-y-auto max-h-[90vh] bg-white/80 rounded-lg">
-                  <DialogHeader>
-                    <DialogTitle className="text-2xl md:text-3xl font-bold text-gray-900">
-                      {project.title}
-                    </DialogTitle>
-                  </DialogHeader>
-
-                  <div className="mt-4 space-y-6 text-gray-800">
-                    {project.longDescription && (
-                      <>
-                        <div className="prose prose-sm md:prose-base max-w-none prose-headings:text-primary prose-strong:text-gray-900">
-                          <Markdown>{project.longDescription}</Markdown>
-                        </div>
-                        {project.longDescription.includes("Get Notified!") && (
-                          <NotifyMeForm />
-                        )}
-                      </>
-                    )}
-
-                    <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-200">
-                      <Button
-                        size="lg"
-                        onClick={() => handleRequestAccess(project.title)}
-                        disabled={
-                          isRequestingAccess &&
-                          requestedProject === project.title
-                        }
-                        className="flex-1"
-                      >
-                        {isRequestingAccess &&
-                        requestedProject === project.title
-                          ? "Sending Request..."
-                          : "Request Access"}
-                      </Button>
-                      {project.githubUrl && (
+                      <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-200">
                         <Button
-                          asChild
-                          variant="outline"
                           size="lg"
-                          className="flex-1 border-gray-400 text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleRequestAccess(project.title)}
+                          disabled={
+                            isRequestingAccess &&
+                            requestedProject === project.title
+                          }
+                          className="flex-1"
                         >
-                          <a
-                            href={project.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center justify-center gap-2"
-                          >
-                            <Github className="w-5 h-5" />
-                            View on GitHub
-                          </a>
+                          {isRequestingAccess &&
+                          requestedProject === project.title
+                            ? "Sending Request..."
+                            : "Request Access"}
                         </Button>
-                      )}
+                        {project.githubUrl && (
+                          <Button
+                            asChild
+                            variant="outline"
+                            size="lg"
+                            className="flex-1 border-gray-400 text-gray-700 hover:bg-gray-100"
+                          >
+                            <a
+                              href={project.githubUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center justify-center gap-2"
+                            >
+                              <Github className="w-5 h-5" />
+                              View on GitHub
+                            </a>
+                          </Button>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            ))}
-          </motion.div>
-        </motion.section>
+                  </DialogContent>
+                </Dialog>
+              ))}
+            </motion.div>
+          </motion.section>
+        </div>
       </div>
-    </div>
+    </LazyMotion>
   );
 }

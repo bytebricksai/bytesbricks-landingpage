@@ -10,7 +10,6 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
     <>
       <div className="relative min-h-screen w-full">
         <DotPattern
-          glow={true}
           className={cn(
             "[mask-image:radial-gradient(circle_at_center,white,transparent_80%)]",
             "absolute inset-0 -z-10 h-full w-full"
