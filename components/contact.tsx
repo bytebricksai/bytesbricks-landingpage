@@ -34,8 +34,15 @@ const itemVariants = {
   },
 };
 
-export default function ContactPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+interface ContactPageProps {
+  isModalOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
+}
+
+export default function ContactPage({
+  isModalOpen,
+  onOpenChange,
+}: ContactPageProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -65,7 +72,7 @@ export default function ContactPage() {
         setName("");
         setEmail("");
         setMessage("");
-        setIsModalOpen(false);
+        onOpenChange(false);
       } else {
         throw new Error("Failed to send message");
       }
@@ -102,9 +109,9 @@ export default function ContactPage() {
               Connect With Us
             </motion.h1>
             <motion.div className="space-y-6" variants={itemVariants}>
-              <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+              <Dialog open={isModalOpen} onOpenChange={onOpenChange}>
                 <div
-                  onClick={() => setIsModalOpen(true)}
+                  onClick={() => onOpenChange(true)}
                   className="flex items-center justify-between p-4 text-base rounded-lg hover:text-zinc-600 transition duration-300 cursor-pointer border border-white/20 hover:border-primary group backdrop-blur-sm bg-white/10"
                 >
                   <div className="flex items-center space-x-3">

@@ -3,7 +3,11 @@
 import { useEffect, useState, useRef } from "react";
 import { Menu } from "lucide-react";
 
-export default function Nav() {
+interface NavProps {
+  onOpenContactModal: () => void;
+}
+
+export default function Nav({ onOpenContactModal }: NavProps) {
   const [activeSection, setActiveSection] = useState("about");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const clickedRef = useRef(false);
@@ -77,11 +81,9 @@ export default function Nav() {
     }
   };
 
-  // Placeholder for demo request action
   const handleRequestDemo = () => {
-    setIsMenuOpen(false); // Close menu if open
-    // Add actual logic here, e.g., open a modal, scroll to contact, etc.
-    alert("Demo request functionality to be implemented.");
+    setIsMenuOpen(false);
+    onOpenContactModal();
   };
 
   return (
